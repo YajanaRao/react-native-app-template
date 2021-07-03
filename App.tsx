@@ -8,6 +8,8 @@ import { View } from 'react-native';
 import store from './app/store'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { decrement, increment } from './app/features/counter/counterSlice';
+import { PropertiesList } from './app/components/PropertiesList';
+import { DetailScreen } from './app/pages/Details';
 
 const HomeScreen = ({ navigation }) => {
   const count = useSelector((state) => state.counter.value)
@@ -33,22 +35,11 @@ const HomeScreen = ({ navigation }) => {
           Decrement
         </Button>
       </View>
-      <Button onPress={() => navigation.navigate('Details')}
-      >
-        Details
-      </Button>
+      <PropertiesList />
     </Layout>
   )
 }
-const DetailScreen = ({ navigation }) => (
-  <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text category='h1'>DETAILS</Text>
-    <Button onPress={() => navigation.navigate("Home")}
-    >
-      Home
-    </Button>
-  </Layout>
-);
+
 
 
 
