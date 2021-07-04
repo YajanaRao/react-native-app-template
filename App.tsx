@@ -16,8 +16,7 @@ const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   return (
     <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text category='h1'>HOME</Text>
-      <Text category='h2'>{count}</Text>
+      <Text category='h1'>Count: {count}</Text>
       <View style={{ flexDirection: 'row' }}>
         <Button
           accessoryLeft={(props) => <Icon {...props} name="plus-circle-outline" />}
@@ -40,9 +39,20 @@ const HomeScreen = ({ navigation }) => {
   )
 }
 
+const config = {
+  screens: {
+    Home: '/',
+    Details: 'details',
+  },
+};
 
 
-
+const linking = {
+  prefixes: [
+    /* your linking prefixes */
+  ],
+  config,
+};
 
 const Stack = createStackNavigator();
 
@@ -51,10 +61,10 @@ function App() {
     <Provider store={store}>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
-        <NavigationContainer>
+        <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
           <Stack.Navigator>
             <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Details" component={DetailScreen} />
+            <Stack.Screen name="Details" component={DetailScreen} options={{ title: 'Property Details' }} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApplicationProvider>

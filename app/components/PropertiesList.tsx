@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { Card, Text, Avatar, ListItem, Button, Divider, List, Layout } from '@ui-kitten/components';
 import React from 'react';
-import { View, ActivityIndicator, FlatList, Image } from 'react-native';
+import { View, ActivityIndicator, FlatList, Image, Platform } from 'react-native';
 import { useGetPropertiesQuery } from '../features/properties/propertiesSlice';
 
 export interface PropertiesListProps {
@@ -13,31 +13,45 @@ export function PropertiesList(props: PropertiesListProps) {
 
     console.log('data', data);
     if (isLoading) return <ActivityIndicator />
+
+    if (error) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text category='h1'>Something went wrong</Text>
+                <Text>{error.message}</Text>
+                {/* <Button
+                    style={{ margin: 12 }}
+                    onPress={() => navigation.navigate("Home")}
+                >
+                    Home
+                </Button> */}
+            </View>
+        )
+    }
     return (
         <Layout style={{ margin: 12 }}>
-            <Text category='h2'>Properties</Text>
-            <List
+            <Text category='h2' style={{ textAlign: "center" }}>Properties</Text>
+            <FlatList
                 data={data}
                 ItemSeparatorComponent={Divider}
+                numColumns={Platform.OS === "web" ? 2 : 1}
                 renderItem={({ item }) => (
-                    <Card>
-                        <ListItem
-                            title={item.title}
-                            description={item.shortDescription}
-                            accessoryLeft={(props) => (
-                                <Avatar
-                                    {...props}
-                                    style={[props.style, { tintColor: null }]}
-                                    source={item.banner}
-                                />
-                            )}
+                    <Card
+                        header={() => (
+                            <Image source={item.banner} style={{ width: 300, height: 200 }} />
+                        )}
+                        footer={() => (
+                            <View style={{ marginHorizontal: 4 }}>
 
-                            accessoryRight={(props) => (
-                                <Button size='tiny' onPress={() => navigation.navigate('Details', { id: item.id })}>
+                                <Button onPress={() => navigation.navigate('Details', { id: item.id })}>
                                     Details
                                 </Button>
-                            )}
-                        />
+                            </View>
+                        )}
+                        style={{ width: 300, margin: 12 }}
+                    >
+                        <Text category='h4'>{item.title}</Text>
+                        <Text>{item.shortDescription}</Text>
                     </Card>
                 )}
             />
